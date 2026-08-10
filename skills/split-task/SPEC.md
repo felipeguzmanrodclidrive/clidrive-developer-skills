@@ -1,10 +1,6 @@
 # Spec: `/split-task` — Notion task decomposer
 
-**Date:** 2026-08-10
-**Author:** Felipe Guzmán
-**Status:** approved (design), pending implementation plan
-
-## 1. Decisions (from brainstorming)
+## 1. Decisions
 
 | Decision | Choice |
 |---|---|
@@ -24,7 +20,6 @@
 
 - Database "AI Tasks" (`2e17e666162280fbadc2d1cab7e6766f`), data source "AI/Data Tasks" =
   `collection://2e17e666-1622-8144-8f4a-000b4e307e9c`, teamspace JustTech.
-- Felipe's user id: `1fbd872b-594c-81a0-9897-00024fb6c534`.
 - Relevant schema (confirmed via live `notion-fetch` of the data source, not assumed from
   older documentation):
   - `Task ID` — `auto_increment_id`.
@@ -82,13 +77,14 @@ is read/analyze/propose/write, not implementation).
    confirmed against real repo structure from step 3. No fixed count or size rule.
 5. **Business-ambiguity check.** If writing a sub-task well requires a business decision that
    isn't in the task text, the media, or derivable from the codebase (a policy call, a price,
-   whether something is mandatory, user-facing copy with commercial impact), ask Felipe one
-   specific question with a recommended default, wait for the answer, then continue. Never
-   guess silently on a business call; never block indefinitely on a technical one — decide
-   technical gaps yourself from the exploration in step 3.
+   whether something is mandatory, user-facing copy with commercial impact), ask the person
+   who triggered the run one specific question with a recommended default, wait for the
+   answer, then continue. Never guess silently on a business call; never block indefinitely on
+   a technical one — decide technical gaps yourself from the exploration in step 3.
 6. **Present the plan.** Show the proposed sub-tasks (title + 1-2 line summary each,
-   noting which repo(s) each touches) and **stop**. Wait for Felipe's explicit approval before
-   writing anything to Notion. If he requests changes, revise the plan and present again.
+   noting which repo(s) each touches) and **stop**. Wait for explicit approval from the person
+   who triggered the run before writing anything to Notion. If they request changes, revise
+   the plan and present again.
 7. **Create sub-tasks.** On approval, `notion-create-pages` with `parent` =
    `data_source_id: 2e17e666-1622-8144-8f4a-000b4e307e9c` (one call, one page per sub-task).
    For each: `Task name`, `Status = "Ready to start"`, `Priority` (inherited from the parent
@@ -99,16 +95,16 @@ is read/analyze/propose/write, not implementation).
    the media; omit `QA discovery` rather than inventing cases that aren't grounded in
    anything.
 8. **Report back.** `notion-create-comment` on the **parent** task listing every created
-   sub-task with its link and a one-line summary. Do not change the parent's `Status`. Tell
-   Felipe in the chat that the sub-tasks are live and ready to be picked up.
+   sub-task with its link and a one-line summary. Do not change the parent's `Status`. Report
+   in the chat that the sub-tasks are live and ready to be picked up.
 
 ## 4. Error handling
 
 - **Task fetch fails / URL invalid** — report the error, stop; do not fabricate task content.
 - **No real split exists** (task is already small enough) — say so instead of forcing a split,
   and leave the task as is.
-- **Ambiguous business call** — ask Felipe (step 5); never proceed on a guess for something
-  that depends on what the business wants.
+- **Ambiguous business call** — ask the person who triggered the run (step 5); never proceed
+  on a guess for something that depends on what the business wants.
 - **Notion write fails partway** (some sub-tasks created, then an error) — report exactly
   which sub-tasks were created (with links) and which were not, so nothing is silently lost or
   duplicated on retry.
@@ -120,7 +116,7 @@ commented. Manual trigger only.
 
 **Out of v1:** who picks up the sub-tasks afterward; batch/multi-task mode; polling/cron
 triggers; downloading/attaching media files to sub-tasks (media is read for context/business
-logic only, per the brainstorming decision).
+logic only).
 
 ## 6. Repo scaffolding
 
@@ -144,6 +140,6 @@ needed — not part of this skill's build.
 ## 7. Validation
 
 Before relying on this in real Notion data: run it once against a real, sufficiently large
-task with Felipe watching, using the confirmation gate (step 6) as the safety net — if the
+task with someone watching, using the confirmation gate (step 6) as the safety net — if the
 proposed split is wrong, reject it there before anything is written. No `--dry-run` flag is
 needed for v1 since step 6 already gates every write.
