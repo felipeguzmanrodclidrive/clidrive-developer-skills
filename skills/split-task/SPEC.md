@@ -144,15 +144,12 @@ folder, the same shape as the existing `~/.claude/skills/run-task/`:
 
 ```
 clidrive-developer-skills/
-├── skills/
-│   └── split-task/
-│       ├── SKILL.md
-│       └── references/
-│           └── notion.md
-└── docs/
-    └── superpowers/
-        └── specs/
-            └── 2026-08-10-split-task-design.md
+└── skills/
+    └── split-task/
+        ├── SKILL.md
+        ├── SPEC.md
+        └── references/
+            └── notion.md
 ```
 
 `references/notion.md` holds the schema facts from §3.1 (data source id, property names,
