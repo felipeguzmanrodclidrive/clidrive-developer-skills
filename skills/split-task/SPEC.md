@@ -4,25 +4,10 @@
 **Author:** Felipe Guzmán
 **Status:** approved (design), pending implementation plan
 
-## 1. Purpose
-
-`clidrive-developer-skills` is a new suite of Claude Code skills, built on the superpowers
-plugin infrastructure, meant to eventually automate all of Felipe's day-to-day work across
-Clidrive repos. This spec covers the first skill in that suite: `split-task`.
-
-`split-task` takes one large or ambiguous Notion task and turns it into several small,
-well-formed, immediately actionable sub-tasks in the same Notion database. It does not
-implement anything, and it does not decide who or what executes the sub-tasks afterward —
-that consumer (a person, `/run-task`, or some other future agent) is out of scope here.
-
-This is explicitly **not** related to the existing `/run-task` pipeline
-(`~/.claude/skills/run-task/`). That pipeline is untouched by this work.
-
-## 2. Decisions (from brainstorming)
+## 1. Decisions (from brainstorming)
 
 | Decision | Choice |
 |---|---|
-| Relationship to `/run-task` | None. Totally separate, new pipeline. |
 | Sub-task destination | New pages in Notion, related via `Sub-task` / `Parent task`. |
 | Trigger | Manual, one task per run: `/split-task <notion-url>`. |
 | Reference media (images, links) | Read and interpreted as the deterministic source of business logic — not vague inspiration, not merely acknowledged. |
@@ -33,9 +18,9 @@ This is explicitly **not** related to the existing `/run-task` pipeline
 | Sub-task sizing | No hard rule (no forced one-repo/one-PR). Judgment-based. |
 | Command name | `/split-task` (English command name; conversational Spanish triggers still supported). |
 
-## 3. Environment facts (verified live, 2026-08-10)
+## 2. Environment facts (verified live, 2026-08-10)
 
-### 3.1 Notion data model
+### 2.1 Notion data model
 
 - Database "AI Tasks" (`2e17e666162280fbadc2d1cab7e6766f`), data source "AI/Data Tasks" =
   `collection://2e17e666-1622-8144-8f4a-000b4e307e9c`, teamspace JustTech.
@@ -63,7 +48,7 @@ This is explicitly **not** related to the existing `/run-task` pipeline
   `notion-fetch` / `notion-search` / `notion-create-pages` / `notion-update-page` /
   `notion-create-comment`.
 
-### 3.2 Repos available for scope-grounding exploration
+### 2.2 Repos available for scope-grounding exploration
 
 Local checkouts under `~/Documents/Clidrive/` (verified present, 2026-08-10): `backend`,
 `lib-intelligence`, `svc-intelligence`, `svc-vision`, `lib-vision`, `lib-decision-science`,
@@ -73,7 +58,7 @@ reads these local checkouts (grep/search) — it does not clone or fetch remote 
 list can drift as repos are added/removed locally, so the skill should discover it by
 listing `~/Documents/Clidrive/` at run time rather than hardcoding these names.
 
-## 4. Pipeline
+## 3. Pipeline
 
 Runs as a single orchestrating skill in the main session (no subagent dispatch needed — this
 is read/analyze/propose/write, not implementation).
@@ -117,7 +102,7 @@ is read/analyze/propose/write, not implementation).
    sub-task with its link and a one-line summary. Do not change the parent's `Status`. Tell
    Felipe in the chat that the sub-tasks are live and ready to be picked up.
 
-## 5. Error handling
+## 4. Error handling
 
 - **Task fetch fails / URL invalid** — report the error, stop; do not fabricate task content.
 - **No real split exists** (task is already small enough) — say so instead of forcing a split,
@@ -128,19 +113,18 @@ is read/analyze/propose/write, not implementation).
   which sub-tasks were created (with links) and which were not, so nothing is silently lost or
   duplicated on retry.
 
-## 6. Scope
+## 5. Scope
 
 **In v1:** one Notion task in, N Notion sub-tasks out, human-approved before write, parent
 commented. Manual trigger only.
 
 **Out of v1:** who picks up the sub-tasks afterward; batch/multi-task mode; polling/cron
-triggers; any change to `/run-task`; downloading/attaching media files to sub-tasks (media is
-read for context/business logic only, per the brainstorming decision).
+triggers; downloading/attaching media files to sub-tasks (media is read for context/business
+logic only, per the brainstorming decision).
 
-## 7. Repo scaffolding (this being the first skill in `clidrive-developer-skills`)
+## 6. Repo scaffolding
 
-No plugin manifest, no `.claude-plugin/`, no marketplace apparatus — just a plain skill
-folder, the same shape as the existing `~/.claude/skills/run-task/`:
+Plain skill folder. No plugin manifest, no `.claude-plugin/`, no marketplace apparatus:
 
 ```
 clidrive-developer-skills/
@@ -152,13 +136,12 @@ clidrive-developer-skills/
             └── notion.md
 ```
 
-`references/notion.md` holds the schema facts from §3.1 (data source id, property names,
-status values) and the write patterns from §4 steps 7-8, so `SKILL.md` stays control-flow
-only, following the same separation of concerns as the existing `run-task` skill. Plugin
-packaging (a `.claude-plugin/plugin.json`, so the suite can be installed as a formal Claude
-Code plugin) is deferred until it's actually needed — not part of this skill's build.
+`references/notion.md` holds the schema facts from §2.1 (data source id, property names,
+status values) and the write patterns from §3 steps 7-8, so `SKILL.md` stays control-flow
+only. Plugin packaging (a `.claude-plugin/plugin.json`) is deferred until it's actually
+needed — not part of this skill's build.
 
-## 8. Validation
+## 7. Validation
 
 Before relying on this in real Notion data: run it once against a real, sufficiently large
 task with Felipe watching, using the confirmation gate (step 6) as the safety net — if the
