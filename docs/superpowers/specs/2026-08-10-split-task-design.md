@@ -139,13 +139,11 @@ read for context/business logic only, per the brainstorming decision).
 
 ## 7. Repo scaffolding (this being the first skill in `clidrive-developer-skills`)
 
-The repo is currently empty (no commits). This work also lays minimal plugin scaffolding
-modeled on superpowers' layout, so future skills in the suite drop in the same way:
+No plugin manifest, no `.claude-plugin/`, no marketplace apparatus — just a plain skill
+folder, the same shape as the existing `~/.claude/skills/run-task/`:
 
 ```
 clidrive-developer-skills/
-├── .claude-plugin/
-│   └── plugin.json
 ├── skills/
 │   └── split-task/
 │       ├── SKILL.md
@@ -159,7 +157,9 @@ clidrive-developer-skills/
 
 `references/notion.md` holds the schema facts from §3.1 (data source id, property names,
 status values) and the write patterns from §4 steps 7-8, so `SKILL.md` stays control-flow
-only, following the same separation of concerns as the existing `run-task` skill.
+only, following the same separation of concerns as the existing `run-task` skill. Plugin
+packaging (a `.claude-plugin/plugin.json`, so the suite can be installed as a formal Claude
+Code plugin) is deferred until it's actually needed — not part of this skill's build.
 
 ## 8. Validation
 
