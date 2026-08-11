@@ -45,13 +45,13 @@
 
 ### 2.2 Repos available for scope-grounding exploration
 
-Local checkouts under `~/Documents/Clidrive/` (verified present, 2026-08-10): `backend`,
+Local checkouts under `$CLIDRIVE_REPOS_ROOT` (default `~/Documents/REPOS`; verified present, 2026-08-10): `backend`,
 `lib-intelligence`, `svc-intelligence`, `svc-vision`, `lib-vision`, `lib-decision-science`,
 `svc-decision-science`, `decision-apps`, `infra`, `clidrive.com`, `connect.clidrive.com`,
 `dataflow-automation`, `backfill-scripts`, `scripts-data-analysis`, `rtk`. The skill only
 reads these local checkouts (grep/search) — it does not clone or fetch remote repos. This
 list can drift as repos are added/removed locally, so the skill should discover it by
-listing `~/Documents/Clidrive/` at run time rather than hardcoding these names.
+listing `$CLIDRIVE_REPOS_ROOT` at run time rather than hardcoding these names.
 
 ## 3. Pipeline
 
