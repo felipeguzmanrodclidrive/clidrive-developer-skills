@@ -4,7 +4,7 @@ Canonical schema and patterns for AI Tasks database, shared by `split-task` and 
 
 ## Identifiers
 
-Data source: `collection://2e17e666-1622-8144-8f4a-000b4e307e9c` ("AI Tasks" database, teamspace JustTech).
+Data source: `collection://2e17e666-1622-8144-8f4a-000b4e307e9c` ("AI/Data Tasks" data source, "AI Tasks" database, teamspace JustTech).
 
 No Business plan is available on this workspace, so `notion-query-data-sources` (SQL) is unavailable. Use `notion-fetch`, `notion-search`, `notion-update-page`, `notion-create-pages`, and `notion-create-comment` instead.
 
@@ -20,6 +20,8 @@ No Business plan is available on this workspace, so `notion-query-data-sources` 
 - `Parent task` — relation, limit 1, same data source.
 - `Sub-task` — relation, array, same data source.
 - `Github Branch Name` — read-only formula; read this value, never try to set it.
+
+The `AI Projects` and `Sprint` relations and the `Estimates count` formula also exist on this database. Leave them unset unless their value is clearly known or relevant to the task.
 
 ## Patterns
 

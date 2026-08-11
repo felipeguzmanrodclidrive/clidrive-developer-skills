@@ -21,11 +21,11 @@ All repositories belonging to a single task share the branch folder, grouping re
 
 ## Branch Naming
 
-The branch name comes from Notion in the `Github Branch Name` field. This name must be identical across all repositories involved in the task. After creating or attaching a worktree, fetch updates from the remote and base the worktree off the repository's default branch (usually `main`).
+The branch name comes from Notion in the `Github Branch Name` field. This name must be identical across all repositories involved in the task. Fetch updates from the remote first. For a new branch, create the worktree based off the repository's default branch (usually `main`). If the branch already exists, attach to it instead.
 
 ## Idempotency
 
-If the branch already exists in a repository's worktree folder, attach the worktree to the existing branch instead of recreating it. Never delete an existing branch or worktree; reuse it and update it to the latest remote state.
+If the branch already exists in a repository's worktree folder, attach the worktree to it and leave it as-is. Nothing is recreated, refreshed, or deleted.
 
 ## Delegation
 
