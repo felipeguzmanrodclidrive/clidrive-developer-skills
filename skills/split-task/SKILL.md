@@ -29,7 +29,7 @@ Announce at start: "Using split-task to break down <Task name> (<Task ID>)."
    wins.
 
 3. **Scope exploration.** For each candidate sub-task taking shape, search the local repos
-   under `~/Documents/Clidrive/` (list them at run time rather than assuming a fixed set) to
+   under `$CLIDRIVE_REPOS_ROOT` (default `~/Documents/REPOS`; list them at run time rather than assuming a fixed set) to
    confirm which repo(s) or component(s) it touches and whether related code already exists.
    This grounds `Technical discovery` for each sub-task; it is not full solution design.
 
